@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block style %}
+{{ block.super }}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.image_mrr
+{
+    width: 300px;
+    min-height: 120px;
+    max-height: auto;
+    float: left;
+    padding: 10px;
+}
+
+.hotel_detail
+{
+    float: left;
+    padding: 10px;
+}
+
+.empty-div
+{
+    clear: both;
+}
+
+
+{% endblock %}
+
+{%  block content %}
+
+
+        {% for employee in employees %}
+
+
+               <div class="image_mrr">
+                {% if employee.image %}
+                    <img src="{{ employee.image.url }}">
+                {% endif %}
+
+            </div>
+
+            <div class="hotel_detail">
+
+                    <h2>{{ employee.first_name }}
+                        <span class="badge badge-success">{{ employee.second_name }}</span></h2></a>
+                <ul>
+                    <li>{{ employee.first_name }}</li>
+                    <li>{{ employee.last_name }}</li>
+                    <li>{{ employee.bio}}</li>
+                    <li>{{ employee.email }}</li>
+                    <li>{{ employee.technology.tech_name }}</li>
+
+                    <br>
+                </ul>
+            </div>
+
+            <div class="empty-div">
+            </div>
+
+        <hr/>
+        {% endfor %}
+
+
+
+
+
+{% endblock %}

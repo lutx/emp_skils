@@ -1,4 +1,17 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
+from jet.dashboard.dashboard import Dashboard, AppIndexDashboard
+from jet.dashboard.dashboard_modules import google_analytics
+
+
+class CustomIndexDashboard(Dashboard):
+    columns = 3
+
+    def init_with_context(self, context):
+       self.available_children.append(google_analytics.GoogleAnalyticsVisitorsTotals)
+       self.available_children.append(google_analytics.GoogleAnalyticsVisitorsChart)
+       self.available_children.append(google_analytics.GoogleAnalyticsPeriodVisitors)
+
 
 class Technology(models.Model):
 
@@ -20,7 +33,7 @@ class Technology(models.Model):
     logo = models.ImageField(upload_to='images/technology/', blank=True, null=True)
 
     def __str__(self):
-        return "{}-{}-{}".format(self.tech_name, self.description, self.logo)
+        return "{} {} {}".format(self.tech_name, self.description, self.logo)
 
 class Employee(models.Model):
 
@@ -33,7 +46,15 @@ class Employee(models.Model):
     technology = models.ForeignKey(Technology, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "<Employee: {} {}>".format(self.first_name, self.last_name)
+        return "{} {} {} {} {} {} {}>".format(
+            self.first_name,
+            self.last_name,
+            self.email,
+            self.work_experience,
+            self.bio,
+            self.image,
+            self.technology.tech_name,
+            self.technology.logo)
 
     def __repr__(self):
         return self.__str__()
@@ -51,10 +72,10 @@ class EmpTech(models.Model):
     employee = models.ForeignKey(Employee,  on_delete=models.CASCADE)
     skil_level = models.CharField(max_length=30, choices=Skills)
 
-    fieldsets = (
-        (None, {
-            'fields': ('technology', 'employee', 'ski;_level')
-        }))
+
 
     def __str__(self):
-        return "{}-{}-{}".format(self.technology.tech_name, self.employee.first_name, self.skil_level)
+        return "{} {} {}".format(
+            self.technology.tech_name,
+            self.employee.first_name,
+            self.skil_level)
